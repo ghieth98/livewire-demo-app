@@ -16,6 +16,8 @@ class ProductsList extends Component
     public Product $product;
     public array $categories = [];
     public array $countries = [];
+    public string $sortColumn = 'products.name';
+    public string $sortDirection = 'asc';
     public array $searchColumns = [
         'name' => '',
         'price' => ['', ''],
@@ -24,11 +26,31 @@ class ProductsList extends Component
         'country_id' => 0
     ];
 
+    protected $queryString = [
+        'sortColumn' => [
+            'except' => 'products.name'
+        ],
+        'sortDirection' => [
+            'except' => 'asc',
+        ],
+    ];
+
 
     public function mount()
     {
         $this->categories = Category::pluck('name', 'id')->toArray();
         $this->countries = Country::pluck('name', 'id')->toArray();
+    }
+
+    public function sortByColumn($column): void
+    {
+        if ($this->sortColumn == $column) {
+            $this->sortDirection = $this->sortDirection == 'asc' ? 'desc' : 'asc';
+
+        } else {
+            $this->reset('sortDirection');
+            $this->sortColumn = $column;
+        }
     }
 
 
@@ -56,6 +78,9 @@ class ProductsList extends Component
                     ->when($column == 'name', fn($products) => $products->where('products.' . $column, 'LIKE', '%' . $value . '%'));
             }
         }
+
+        $products->orderBy($this->sortColumn, $this->sortDirection);
+
         return view('livewire.products-list',
             [
                 'products' => $products->paginate(10),
