@@ -41,7 +41,7 @@
 <script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 <script>
     window.addEventListener('swal:confirm', event => {
-        swal.fire({
+        Swal.fire({
             title: event.detail.title,
             text: event.detail.text,
             icon: event.detail.type,

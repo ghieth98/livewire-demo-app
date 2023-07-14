@@ -16,6 +16,7 @@ class ProductSeeder extends Seeder
             'name' => fake()->colorName,
             'description' => fake()->text(20),
             'country_id' => rand(1, 20),
+
             'price' => rand(1000, 10000)
         ]);
         Product::create([
