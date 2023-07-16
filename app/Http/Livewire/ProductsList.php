@@ -118,8 +118,8 @@ class ProductsList extends Component
                         $products->where('products.price', '<=', $value[1] * 100);
                     }
                 })
-                    ->when($column == 'category_id', fn($products) => $products->whereRelation('categories', 'id', $value))
-                    ->when($column == 'country_id', fn($products) => $products->whereRelation('country', 'id', $value))
+                    ->when($column == 'category_id', fn($products) => $products->whereRelation('categories', 'category_id', $value))
+                    ->when($column == 'country_id', fn($products) => $products->whereRelation('country', 'country_id', $value))
                     ->when($column == 'name', fn($products) => $products->where('products.' . $column, 'LIKE', '%' . $value . '%'));
             }
         }
