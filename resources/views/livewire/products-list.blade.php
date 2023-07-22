@@ -8,6 +8,12 @@
         <div class="mx-auto max-w-7xl sm:px-6 lg:px-8">
             <div class="overflow-hidden bg-white shadow-sm sm:rounded-lg">
                 <div class="p-6 bg-white border-b border-gray-200">
+                    @error('orderexist')
+                    <div class="p-3 mb-4 text-green-700 bg-green-200">
+                        {!! $message !!}
+                    </div>
+                    @enderror
+
                     <div class="mb-4">
 
                         <div class="mb-4">
@@ -62,7 +68,7 @@
                                 <th wire:click="sortByColumn('price')"
                                     class="px-6 py-3 w-32 text-left bg-gray-50">
                                     <span class="text-xs font-medium tracking-wider leading-4 text-gray-500 uppercase">Price</span>
-                                    @if($sortDirection == 'price')
+                                    @if($sortColumn == 'price')
                                         @include('svg.sort-'. $sortDirection)
                                     @else
                                         @include('svg.sort')

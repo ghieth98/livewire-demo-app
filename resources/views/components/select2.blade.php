@@ -1,6 +1,6 @@
 <div>
     <div wire:ignore class="w-full">
-        <select class="select2" data-placeholder="{{ __('Select your option') }}" {{ $attributes}}>
+        <select class="select2" data-placeholder="{{ __('Select your option') }}" {{ $attributes }}>
             @if(!isset($attributes['multiple']))
                 <option></option>
             @endif
@@ -27,7 +27,6 @@
             Livewire.hook('message.processed', (message, component) => {
                 initSelect()
             });
-
             el.on('change', function (e) {
                 let data = $(this).select2("val")
                 if (data === "") {

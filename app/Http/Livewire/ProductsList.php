@@ -67,12 +67,21 @@ class ProductsList extends Component
     public function delete($id): void
     {
         $product = Product::findOrFail($id);
+        if ($product->orders()->exists()) {
+            $this->addError('orderExist', 'This product can not be deleted, it already has an order');
+            return;
+        }
         $product->delete();
     }
 
     public function deleteSelected(): void
     {
         $products = Product::whereIn('id', $this->selected)->get();
+        foreach ($products as $product) {
+            if ($product->orders()->exists()) {
+                $this->addError('orderExist', 'This product can not be deleted, it already has an order');
+            }
+        }
         $products->each->delete();
         $this->reset('selected');
     }

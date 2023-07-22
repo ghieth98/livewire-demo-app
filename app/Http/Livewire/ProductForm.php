@@ -59,7 +59,7 @@ class ProductForm extends Component
             'product.description' => ['required'],
             'product.country_id' => ['required', 'integer', 'exists:countries,id'],
             'product.price' => ['required'],
-            'categories' => ['required', 'array']
+            'categories' => ['array']
         ];
     }
 
@@ -67,6 +67,6 @@ class ProductForm extends Component
     {
         $this->listsForFields['countries'] = Country::pluck('name', 'id')->toArray();
 
-        $this->listsForFields['categories'] = Category::active()->pluck('name', 'id')->toArray();
+        $this->listsForFields['categories'] = Category::where('is_active', true)->pluck('name', 'id')->toArray();
     }
 }
