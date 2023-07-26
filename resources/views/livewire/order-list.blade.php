@@ -157,7 +157,7 @@
                                         </label>
                                     </td>
                                     <td class="px-6 py-4 text-sm leading-5 text-gray-900 whitespace-no-wrap">
-                                        {{ $order->order_date->format('m/d/Y') }}
+                                        {{ \Carbon\Carbon::parse($order->order_date)->format('d-M-Y') }}
                                     </td>
                                     <td class="px-6 py-4 text-sm leading-5 text-gray-900 whitespace-no-wrap">
                                         {{ $order->username }}
@@ -200,7 +200,4 @@
         </div>
     </div>
 </div>
-@push('js')
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.29.1/moment.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/pikaday/pikaday.js"></script>
-@endpush
+

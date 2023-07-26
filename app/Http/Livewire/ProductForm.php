@@ -2,17 +2,18 @@
 
 namespace App\Http\Livewire;
 
-use App\Models\Category;
+use Livewire\Component;
 use App\Models\Country;
 use App\Models\Product;
+use App\Models\Category;
+use Livewire\Redirector;
 use Illuminate\Contracts\View\View;
 use Illuminate\Http\RedirectResponse;
-use Livewire\Component;
-use Livewire\Redirector;
 
 class ProductForm extends Component
 {
     public Product $product;
+
     public bool $editing = false;
 
     public array $categories = [];
@@ -59,7 +60,7 @@ class ProductForm extends Component
             'product.description' => ['required'],
             'product.country_id' => ['required', 'integer', 'exists:countries,id'],
             'product.price' => ['required'],
-            'categories' => ['array']
+            'categories' => ['required', 'array']
         ];
     }
 

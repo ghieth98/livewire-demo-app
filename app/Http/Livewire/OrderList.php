@@ -17,7 +17,7 @@ class OrderList extends Component
     public array $selected = [];
     public string $sortColumn = 'orders.order_date';
     public string $sortDirection = 'asc';
-    public array $searchColumn = [
+    public array $searchColumns = [
         'username' => '',
         'order_date' => ['', ''],
         'subtotal' => ['', ''],
@@ -33,7 +33,7 @@ class OrderList extends Component
             ->join('users', 'users.id', '=', 'orders.user_id')
             ->with('products');
 
-        foreach ($this->searchColumn as $column => $value) {
+        foreach ($this->searchColumns as $column => $value) {
             if (!empty($value)) {
                 $orders->when($column == 'order_date', function ($orders) use ($value) {
                     if (!empty($value[0])) {
@@ -85,7 +85,7 @@ class OrderList extends Component
 
     public function deleteConfirm($method, $id = null): void
     {
-        $this->dispatchBrowserEvent('Swal:confirm', [
+        $this->dispatchBrowserEvent('swal:confirm', [
             'type' => 'warning',
             'title' => 'Are you sure?',
             'text', '',

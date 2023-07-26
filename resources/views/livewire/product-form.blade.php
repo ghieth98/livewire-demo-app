@@ -42,17 +42,32 @@
 
                         <div class="mt-4">
                             <x-input-label class="mb-1" for="categories" :value="__('Categories')"/>
+                            <select wire:model="categories" name="categories" id="categories" class="mt-1 select2"
+                                   multiple >
 
-                            <x-select2 class="mt-1" id="categories" name="categories"
-                                       :options="$this->listsForFields['categories']" wire:model="categories" multiple/>
+                                @foreach($listsForFields['categories'] as $key => $value)
+                                    <option value="{{$key}}">
+                                        {{$value}}
+                                    </option>
+                                @endforeach
+                            </select>
+                            {{-- TODO FIX SELECT2 ARRAY PROBLEM --}}
+                            {{--                            <x-select2 class="mt-1" id="categories" name="categories"--}}
+                            {{--                                       :options="$this->listsForFields['categories']" wire:model="categories" multiple/>--}}
                             <x-input-error :messages="$errors->get('categories')" class="mt-2"/>
                         </div>
 
                         <div class="mt-4">
                             <x-input-label class="mb-1" for="country" :value="__('Country')"/>
-
-                            <x-select2 class="mt-1" id="country" name="country"
-                                       :options="$this->listsForFields['countries']" wire:model="product.country_id"/>
+                            <select wire:model="product.country_id" id="country" name="country" class="select2 mt-1">
+                                @foreach($listsForFields['countries'] as $key => $value)
+                                    <option value="{{$key}}">
+                                        {{$value}}
+                                    </option>
+                                @endforeach
+                            </select>
+                            {{--                            <x-select2 class="mt-1" id="country" name="country"--}}
+                            {{--                                       :options="$this->listsForFields['countries']" wire:model="product.country_id"/>--}}
                             <x-input-error :messages="$errors->get('product.country_id')" class="mt-2"/>
                         </div>
 
@@ -80,7 +95,8 @@
                 .create(document.querySelector('#description'))
                 .then(editor => {
                     editor.model.document.on('change:data', () => {
-                    @this.set('product.description', editor.getData());
+                        @this.
+                        set('product.description', editor.getData());
                     })
                     Livewire.on('reinit', () => {
                         editor.setData('', '')

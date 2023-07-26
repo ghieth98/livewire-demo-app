@@ -1,6 +1,7 @@
 <div>
+{{--    @dd($attributes)--}}
     <div wire:ignore class="w-full">
-        <select class="select2" data-placeholder="{{ __('Select your option') }}" {{ $attributes }}>
+        <select  class="select2" data-placeholder="{{ __('Select your option') }}" >
             @if(!isset($attributes['multiple']))
                 <option></option>
             @endif
@@ -15,24 +16,22 @@
     <script>
         document.addEventListener("livewire:load", () => {
             let el = $('#{{ $attributes['id'] }}')
-
             function initSelect() {
                 el.select2({
                     placeholder: '{{ __('Select your option') }}',
                     allowClear: !el.attr('required')
                 })
             }
-
             initSelect()
             Livewire.hook('message.processed', (message, component) => {
                 initSelect()
             });
             el.on('change', function (e) {
-                let data = $(this).select2("val")
+                let data = $('#{{ $attributes['id'] }}').select2("val")
                 if (data === "") {
                     data = null
                 }
-            @this.set('{{ $attributes['wire:model'] }}', data)
+                @this.set('{{ $attributes['wire:model'] }}', data);
             });
         });
     </script>

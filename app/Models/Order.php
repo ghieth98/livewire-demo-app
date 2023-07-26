@@ -19,10 +19,7 @@ class Order extends Model
             'taxes',
             'total'
         ];
-    protected $casts =
-        [
-            'order_date' => 'date:d/m/Y'
-        ];
+
 
     public function user(): BelongsTo
     {

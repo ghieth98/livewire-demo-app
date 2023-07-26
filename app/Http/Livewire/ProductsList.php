@@ -55,9 +55,9 @@ class ProductsList extends Component
 
     public function deleteConfirm($method, $id = null): void
     {
-        $this->dispatchBrowserEvent('swal.confirm', [
+        $this->dispatchBrowserEvent('swal:confirm', [
             'type' => 'warning',
-            'title' => 'Are you sure?',
+            'title' => 'Are you sure to delete?',
             'text' => '',
             'id' => $id,
             'method' => $method

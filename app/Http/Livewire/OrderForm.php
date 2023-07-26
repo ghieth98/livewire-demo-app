@@ -6,20 +6,24 @@ use App\Models\Order;
 use App\Models\Product;
 use App\Models\User;
 use Carbon\Carbon;
-use Illuminate\Contracts\Foundation\Application;
-use Illuminate\Contracts\View\Factory;
 use Illuminate\Contracts\View\View;
-use Illuminate\Http\RedirectResponse;
 use Illuminate\Support\Collection;
 use Livewire\Component;
+use Livewire\Redirector;
+use Symfony\Component\HttpFoundation\RedirectResponse;
 
 class OrderForm extends Component
 {
     public Order $order;
+
     public Collection $allProducts;
-    public bool $editing = false;
+
     public array $orderProducts = [];
+
+    public bool $editing = false;
+
     public array $listsForFields = [];
+
     public int $taxesPercent = 0;
 
     public function mount(Order $order): void
@@ -38,8 +42,6 @@ class OrderForm extends Component
                     'is_saved' => true,
                 ];
             }
-        } else {
-            $this->order->order_date = today();
         }
 
         $this->initListsForFields();
@@ -51,7 +53,7 @@ class OrderForm extends Component
     {
         foreach ($this->orderProducts as $key => $product) {
             if (!$product['is_saved']) {
-                $this->addError('orderProducts.' . $key, 'This product must be saved before creation a new one');
+                $this->addError('orderProducts.' . $key, 'This line must be saved before creating a new one.');
                 return;
             }
         }
@@ -61,7 +63,7 @@ class OrderForm extends Component
             'quantity' => 1,
             'is_saved' => false,
             'product_name' => '',
-            'product_price' => 0,
+            'product_price' => 0
         ];
     }
 
@@ -78,11 +80,11 @@ class OrderForm extends Component
     {
         foreach ($this->orderProducts as $key => $invoiceProduct) {
             if (!$invoiceProduct['is_saved']) {
-                $this->addError('$this->orderProducts.' . $key, 'This product must be saved before editing another one.');
+                $this->addError('$this->orderProducts.' . $key, 'This line must be saved before editing another.');
                 return;
             }
-
         }
+
         $this->orderProducts[$index]['is_saved'] = false;
     }
 
@@ -92,32 +94,35 @@ class OrderForm extends Component
         $this->orderProducts = array_values($this->orderProducts);
     }
 
-    public function save(): RedirectResponse
+    public function save(): RedirectResponse|Redirector
     {
         $this->validate();
-        $this->order->order_date = Carbon::parse($this->order->order_date)->format('d-m-Y');
+
+        $this->order->order_date = Carbon::parse($this->order->order_date)->format('d-m-y');
+
         $this->order->save();
+
         $products = [];
 
         foreach ($this->orderProducts as $product) {
-            $products[$product['product_id']] =
-                [
-                    'price' => $product['product_price'],
-                    'quantity' => $product['quantity']
-                ];
+            $products[$product['product_id']] = ['price' => $product['product_price'], 'quantity' => $product['quantity']];
         }
+
         $this->order->products()->sync($products);
+
         return redirect()->route('orders.index');
     }
 
-    public function render(): View|\Illuminate\Foundation\Application|Factory|Application
+    public function render(): View
     {
         $this->order->subtotal = 0;
+
         foreach ($this->orderProducts as $orderProduct) {
             if ($orderProduct['is_saved'] && $orderProduct['product_price'] && $orderProduct['quantity']) {
                 $this->order->subtotal += $orderProduct['product_price'] * $orderProduct['quantity'];
             }
         }
+
         $this->order->total = $this->order->subtotal * (1 + $this->taxesPercent / 100);
         $this->order->taxes = $this->order->total - $this->order->subtotal;
 
@@ -139,7 +144,7 @@ class OrderForm extends Component
     protected function initListsForFields(): void
     {
         $this->listsForFields['users'] = User::pluck('name', 'id')->toArray();
-        $this->allProducts = Product::all();
 
+        $this->allProducts = Product::all();
     }
 }
